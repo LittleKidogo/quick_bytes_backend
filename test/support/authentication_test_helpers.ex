@@ -1,4 +1,3 @@
-
 defmodule QbBackend.AuthenticationTestHelpers do
   use Phoenix.ConnTest
   import QbBackend.Factory
@@ -10,10 +9,10 @@ defmodule QbBackend.AuthenticationTestHelpers do
   """
   def authenticate(conn) do
     profile = insert(:profile)
+
     conn
     |> authenticate(profile)
   end
-
 
   @doc """
   when given a connection to authenticate with a user create a jwt token for the

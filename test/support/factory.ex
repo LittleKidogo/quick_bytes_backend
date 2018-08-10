@@ -23,5 +23,4 @@ defmodule QbBackend.Factory do
       user: build(:user)
     }
   end
-
 end

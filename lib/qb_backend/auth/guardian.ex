@@ -14,7 +14,7 @@ defmodule QbBackend.Auth.Guardian do
 
   # we can't Identify that resource
   def subject_for_token(_, _) do
-   {:error, :unknown_resource_type}
+    {:error, :unknown_resource_type}
   end
 
   # determine which subject we are Identifying
@@ -24,5 +24,4 @@ defmodule QbBackend.Auth.Guardian do
   # pic a resource from the provided subject
   defp resource_from_subject("User:" <> id), do: Accounts.get_user(id)
   defp resource_from_subject(_), do: {:error, :unknown_resource_type}
-
 end
