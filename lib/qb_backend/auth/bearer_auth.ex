@@ -1,4 +1,7 @@
 defmodule QbBackend.Auth.BearerAuth do
+  @moduledoc """
+  Authentication pipelines used by Guardian
+  """
   use Guardian.Plug.Pipeline,
     otp_app: :spender,
     error_handler: QbBackend.Auth.ErrorHandler,

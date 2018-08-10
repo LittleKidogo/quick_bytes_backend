@@ -18,7 +18,8 @@ defmodule QbBackend.Auth do
   def authenticate(username, plain_text_password) do
     query = from(p in Profile, where: p.username == ^username)
 
-    Repo.one(query)
+    query
+    |> Repo.one()
     |> Repo.preload(:user)
     |> check_password(plain_text_password)
   end

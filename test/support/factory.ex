@@ -1,5 +1,7 @@
 defmodule QbBackend.Factory do
-  # with Ecto
+  @moduledoc """
+  This module holds factories for test data in the application
+  """
   use ExMachina.Ecto, repo: QbBackend.Repo
 
   alias QbBackend.{

@@ -8,7 +8,7 @@ defmodule QbBackend.Auth.Guardian do
   alias QbBackend.{Accounts, Accounts.User}
 
   # get a field that can Identify a user
-  def subject_for_token(user = %User{}, _claims) do
+  def subject_for_token(%User{} = user, _claims) do
     {:ok, "User:#{user.id}"}
   end
 

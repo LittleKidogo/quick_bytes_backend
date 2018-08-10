@@ -16,7 +16,7 @@ defmodule QbBackend.AuthTest do
     @tag :simple
     test "authenticate/2  returns a user if one exists for the plain password" do
       {:ok, user} = %User{} |> User.changeset(@creds) |> Repo.insert()
-      {:ok, profile} = Profile.create_changeset(user, @profile_creds) |> Repo.insert()
+      {:ok, profile} = user |> Profile.create_changeset(@profile_creds) |> Repo.insert()
       {:ok, %Profile{} = prof} = Auth.authenticate(profile.username, @creds[:hash])
       assert prof.username == @profile_creds[:username]
     end

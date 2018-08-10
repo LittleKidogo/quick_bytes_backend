@@ -1,4 +1,8 @@
 defmodule QbBackend.AuthenticationTestHelpers do
+  @moduledoc """
+  This module contains utility functions for add authetication headers
+  to connections for tests
+  """
   use Phoenix.ConnTest
   import QbBackend.Factory
 
@@ -20,7 +24,7 @@ defmodule QbBackend.AuthenticationTestHelpers do
   """
   def authenticate(conn, profile) do
     # get the token for the user
-    {:ok, token, _} = profile |> QbBackendU.Auth.Guardian.encode_and_sign()
+    {:ok, token, _} = profile |> QbBackend.Auth.Guardian.encode_and_sign()
 
     # add the users token to the request header
     conn
