@@ -8,7 +8,8 @@ defmodule QbBackend.Posts.Manual do
   alias QbBackend.{
     Accounts.Profile,
     Posts.Manual,
-    Posts.Tag
+    Posts.Tag,
+    Posts.Bookmark
   }
 
   @type t :: %__MODULE__{}
@@ -23,8 +24,13 @@ defmodule QbBackend.Posts.Manual do
     belongs_to(:profile, Profile, foreign_key: :profile_id, type: :binary_id)
 
     many_to_many(
-      :tags,
-      Tag,
+      :bookmarks, Bookmark,
+      join_through: "bookmarks_manuals",
+      join_keys: [manual_id: :id, bookmark_id: :id],
+      on_replace: :delete)
+
+    many_to_many(
+      :tags, Tag,
       join_through: "manuals_tags",
       join_keys: [manual_id: :id, tag_id: :id],
       on_replace: :delete
@@ -32,7 +38,7 @@ defmodule QbBackend.Posts.Manual do
   end
 
   @doc """
-    This changeset takes in a struct and a map containig parameters
+    This changeset takes in a struct and a map containing parameters
     and proceeds to match the parameters in the map to the schema above
   """
   @spec changeset(Manual.t(), map()) :: Ecto.Changeset.t()
@@ -52,5 +58,19 @@ defmodule QbBackend.Posts.Manual do
     %Manual{}
     |> Manual.changeset(attrs)
     |> put_assoc(:profile, profile)
+  end
+
+  @doc """
+  This function takes a manual and a bookmark and creates an association between them
+
+  Parameters:
+  * `bookmark` - a valid bookmark in the system
+  * `manual` - a valid manual in the system
+  """
+  @spec add_to_bookmark(Manual.t(), Bookmark.t()) :: {:ok, Bookmark.t()} | {:error, Ecto.Changeset.t()}
+  def add_to_bookmark(%Manual{id: _id, bookmarks: bookmarks} = manual, %Bookmark{} = bookmark) do
+    manual
+    |> changeset(%{})
+    |> put_assoc(:bookmarks, bookmarks ++ [bookmark])
   end
 end

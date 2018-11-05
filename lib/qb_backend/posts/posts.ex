@@ -8,7 +8,8 @@ defmodule QbBackend.Posts do
     Posts.Manual,
     Posts.Comment,
     Accounts.Profile,
-    Posts.Image
+    Posts.Image,
+    Posts.Bookmark
   }
 
   @doc """
@@ -87,11 +88,33 @@ defmodule QbBackend.Posts do
   end
 
   @doc """
-  this function delets an image struct from a manual
+  this function deletes an image struct from a manual
+
+  parameters
+  * `image` - an already existing image in the system
   """
   @spec delete_image(Image.t()) :: {:ok, Image.t()} | {:error, Ecto.Changeset.t()}
   def delete_image(%Image{} = image) do
     image
     |> Repo.delete()
+  end
+
+  @doc """
+  This function actually adds the manual struct to the bookmark
+
+  parameters
+  * `bookmark` - a valid bookmark in the system could
+  * `manual` - a new manual that is being added to an already existing bookmark category
+  """
+@spec add_manual(Bookmark.t(), Manual.t()) :: {:ok, Bookmark.t()} | {:error, Ecto.Changeset.t()}
+  def add_manual(%Bookmark{} = bookmark, %Manual{} = manual) do
+    loaded_bookmark = bookmark |> Repo.preload(:manuals)
+
+
+    with {:ok, %Bookmark{} = updated_bookmark} <- loaded_bookmark |> Bookmark.add_manual_to_bookmark(manual) |> Repo.update()do
+        result_bookmark = updated_bookmark |> Repo.preload(:manuals)
+
+        {:ok, result_bookmark}
+    end
   end
 end
